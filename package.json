@@ -1,0 +1,30 @@
+{
+  "name": "payeezy",
+  "version": "1.0.4",
+  "description": "Integrate with Payeezy",
+  "main": "lib/payeezy.js",
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/payeezy/payeezy_direct_API.git"
+  },
+   "scripts": {
+    "test": "node test/payeezy-test.js"
+  },
+  "keywords": [
+    "firstdata",
+    "payeezy"
+  ],
+  "dependencies": {
+    "q": "~1.0.1",
+    "crypto-js": "3.1.2",
+	"express": "3.x"
+  },
+  "engines": {
+    "node": ">= v0.10.26"
+  },
+  "author": {
+    "name": "Payeezy Support",
+    "email": "support@payeezy.com"
+  },
+  "license": "MIT"
+}
