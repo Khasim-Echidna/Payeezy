@@ -17,7 +17,8 @@
   "dependencies": {
     "q": "~1.0.1",
     "crypto-js": "3.1.2",
-	"express": "3.x"
+	"express": "3.x",
+	"payeezy": "1.0.4"
   },
   "engines": {
     "node": ">= v0.10.26"
