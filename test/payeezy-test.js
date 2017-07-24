@@ -61,6 +61,7 @@ exports.performAuthorizeTransaction = function(secondaryTransactionType) {
 
 exports.performPurchaseTransaction = function(req, res) {
     //console.log('*******************************************\nPerforming Purchase Transaction\n************************************')
+	req.body.paymentId = "pg30417";
     payeezy.transaction.purchase(
 		req.body,
         function(error, response) {
