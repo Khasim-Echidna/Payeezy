@@ -70,16 +70,16 @@ exports.performPurchaseTransaction = function(req, res) {
             }
             if (response) {
                 console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
-				//res.send(response);
-                performSecondaryTransaction("capture", response.transaction_id, response.transaction_tag, response.amount, res);
+				res.send(response);
+                //performSecondaryTransaction(secondaryTransactionType, response.transaction_id, response.transaction_tag, response.amount);
             }
         });
 }
 
-function performSecondaryTransaction(secondaryTransactionType, id, tag, amount, res) {
+function performSecondaryTransaction(secondaryTransactionType, id, tag, amount) {
 
     if (secondaryTransactionType == 'capture') {
-        //console.log('*******************************************\nPerforming Capture Transaction\n************************************')
+        console.log('*******************************************\nPerforming Capture Transaction\n************************************')
 
         payeezy.transaction.capture(id, {
                 method: 'credit_card',
@@ -90,14 +90,12 @@ function performSecondaryTransaction(secondaryTransactionType, id, tag, amount, 
 
             function(error, response) {
                 if (error) {
-                    //console.log('Capture Transaction Failed\n' + error);
-					//return JSON.stringify(error);
-					res.send(error);
+                    console.log('Capture Transaction Failed\n' + error);
+					return JSON.stringify(error);
                 }
                 if (response) {
-                    //console.log('Capture Successful');
-					//return JSON.stringify(response);
-					res.send(response);
+                    console.log('Capture Successful');
+					return JSON.stringify(response);
                     //performAuthorizeTransaction('void');
                 }
             });
