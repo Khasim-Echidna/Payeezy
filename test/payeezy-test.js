@@ -61,7 +61,6 @@ exports.performAuthorizeTransaction = function(secondaryTransactionType) {
 
 exports.performPurchaseTransaction = function(req, res) {
     //console.log('*******************************************\nPerforming Purchase Transaction\n************************************')
-	req.body.paymentId = "pg30417";
     payeezy.transaction.purchase(
 		req.body,
         function(error, response) {
@@ -71,70 +70,16 @@ exports.performPurchaseTransaction = function(req, res) {
             }
             if (response) {
                 console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
-				response = {
-				 "transactionId": "o30446-pg30417-1458555741310",
-				 "currencyCode": "USD",
-				 "paymentId": "pg30417",
-				 "locale": "en",
-				 "gatewaySettings": {
-					  "paymentMethodTypes": "card",
-					  "filteredFields": ["paymentMethodTypes"]
-				 },
-				 "cardDetails": {
-					  "expirationMonth": "02",
-					  "expirationYear": "2018",
-					  "cvv": "234",
-					  "number": "4111111111111111",
-					  "type": "visa",
-					  "holderName": "Test Shopper"
-				 },
-				 "amount": "000000122526",
-				 "transactionType": "0100",
-				 "transactionTimestamp": "2016-03-21T10:22:21+0000",
-				 "billingAddress": {
-					  "lastName": "Shopper",
-					  "postalCode": "01242",
-					  "phoneNumber": "617-555-1977",
-					  "email": "tshopper@example.com",
-					  "state": "MA",
-					  "address1": "1 Main Street",
-					  "address2": "",
-					  "firstName": "Test",
-					  "city": "Cambridge",
-					  "country": "US"
-				 },
-				 "channel": "storefront",
-				 "shippingAddress": {
-					  "lastName": "Shopper",
-					  "postalCode": "01242",
-					  "phoneNumber": "617-555-1977",
-					  "email": "tshopper@example.com",
-					  "state": "MA",
-					  "address1": "1 Main Street",
-					  "address2": "",
-					  "firstName": "Test",
-					  "city": "Cambridge",
-					  "country": "US"
-				 },
-				 "orderId": "o30446",
-				 "paymentMethod": "card",
-				 "gatewayId": "gatewayDemo",
-				 "profile": {
-					  "id": "110454",
-					  "phoneNumber": "617-555-1977",
-					  "email": "tshopper@example.com"
-				 }
-			};
-				res.send(response);
-                //performSecondaryTransaction(secondaryTransactionType, response.transaction_id, response.transaction_tag, response.amount);
+				//res.send(response);
+                performSecondaryTransaction("capture", response.transaction_id, response.transaction_tag, response.amount, res);
             }
         });
 }
 
-function performSecondaryTransaction(secondaryTransactionType, id, tag, amount) {
+function performSecondaryTransaction(secondaryTransactionType, id, tag, amount, res) {
 
     if (secondaryTransactionType == 'capture') {
-        console.log('*******************************************\nPerforming Capture Transaction\n************************************')
+        //console.log('*******************************************\nPerforming Capture Transaction\n************************************')
 
         payeezy.transaction.capture(id, {
                 method: 'credit_card',
@@ -145,12 +90,14 @@ function performSecondaryTransaction(secondaryTransactionType, id, tag, amount) 
 
             function(error, response) {
                 if (error) {
-                    console.log('Capture Transaction Failed\n' + error);
-					return JSON.stringify(error);
+                    //console.log('Capture Transaction Failed\n' + error);
+					//return JSON.stringify(error);
+					res.send(error);
                 }
                 if (response) {
-                    console.log('Capture Successful');
-					return JSON.stringify(response);
+                    //console.log('Capture Successful');
+					//return JSON.stringify(response);
+					res.send(response);
                     //performAuthorizeTransaction('void');
                 }
             });
