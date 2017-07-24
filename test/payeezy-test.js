@@ -70,6 +70,7 @@ exports.performPurchaseTransaction = function(req, res) {
             }
             if (response) {
                 console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
+				response.paymentId = "PY123456";
 				res.send(response);
                 //performSecondaryTransaction(secondaryTransactionType, response.transaction_id, response.transaction_tag, response.amount);
             }
