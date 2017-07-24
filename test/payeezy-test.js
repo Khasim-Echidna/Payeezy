@@ -62,7 +62,60 @@ exports.performAuthorizeTransaction = function(secondaryTransactionType) {
 exports.performPurchaseTransaction = function(req, res) {
     //console.log('*******************************************\nPerforming Purchase Transaction\n************************************')
     payeezy.transaction.purchase(
-		req.body,
+		{
+     "transactionId": "o30446-pg30417-1458555741310",
+     "currencyCode": "USD",
+     "paymentId": "pg30417",
+     "locale": "en",
+     "gatewaySettings": {
+          "paymentMethodTypes": "card",
+          "filteredFields": ["paymentMethodTypes"]
+     },
+     "cardDetails": {
+          "expirationMonth": "02",
+          "expirationYear": "2018",
+          "cvv": "234",
+          "number": "4111111111111111",
+          "type": "visa",
+          "holderName": "Test Shopper"
+     },
+     "amount": "000000122526",
+     "transactionType": "0100",
+     "transactionTimestamp": "2016-03-21T10:22:21+0000",
+     "billingAddress": {
+          "lastName": "Shopper",
+          "postalCode": "01242",
+          "phoneNumber": "617-555-1977",
+          "email": "tshopper@example.com",
+          "state": "MA",
+          "address1": "1 Main Street",
+          "address2": "",
+          "firstName": "Test",
+          "city": "Cambridge",
+          "country": "US"
+     },
+     "channel": "storefront",
+     "shippingAddress": {
+          "lastName": "Shopper",
+          "postalCode": "01242",
+          "phoneNumber": "617-555-1977",
+          "email": "tshopper@example.com",
+          "state": "MA",
+          "address1": "1 Main Street",
+          "address2": "",
+          "firstName": "Test",
+          "city": "Cambridge",
+          "country": "US"
+     },
+     "orderId": "o30446",
+     "paymentMethod": "card",
+     "gatewayId": "gatewayDemo",
+     "profile": {
+          "id": "110454",
+          "phoneNumber": "617-555-1977",
+          "email": "tshopper@example.com"
+     }
+},
         function(error, response) {
             if (error) {
                 console.log('Purchase Transaction Failed\n' + error);
