@@ -61,9 +61,25 @@ exports.performAuthorizeTransaction = function(secondaryTransactionType) {
 
 exports.performPurchaseTransaction = function(req, res) {
     //console.log('*******************************************\nPerforming Purchase Transaction\n************************************')
-	console.log("--->"+JSON.stringify(req.body));
+	var obj = {
+	  "merchant_ref": "Astonishing-Sale",
+	  "transaction_type": "purchase",
+	  "method": "credit_card",
+	  "amount": req.body.amount,
+	  "partial_redemption": "false",
+	  "currency_code": req.body.currencyCode,
+	  "credit_card": {
+		"type": req.body.cardDetails.type,
+		"cardholder_name": req.body.cardDetails.holderName,
+		"card_number": req.body.cardDetails.number,
+		"exp_date": req.body.cardDetails.expirationMonth+req.body.cardDetails.expirationYear.slice(-2),
+		"cvv": req.body.cardDetails.cvv
+	  }
+	};
+	console.log("--->"+obj);
+	console.log("-==->"+JSON.stringify(obj));
     payeezy.transaction.purchase(
-		req.body,
+		obj,
         function(error, response) {
             if (error) {
                 console.log('Purchase Transaction Failed\n' + error);
