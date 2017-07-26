@@ -87,6 +87,15 @@ exports.performPurchaseTransaction = function(req, res) {
             }
             if (response) {
                 console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
+				req.body.authorizationResponse = {
+					  "responseCode": "1000",
+					  "responseReason": response.bank_message,
+					  "responseDescription": response.gateway_message,
+					  "authorizationCode": response.gateway_resp_code,
+					  "hostTransactionId": response.transaction_id,
+					  "merchantTransactionId": response.transaction_id,
+					  "token": response.token.token_data.value
+				 };
 				res.send(req.body);
                 //performSecondaryTransaction(secondaryTransactionType, response.transaction_id, response.transaction_tag, response.amount);
             }
