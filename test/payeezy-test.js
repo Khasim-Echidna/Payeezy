@@ -179,6 +179,7 @@ exports.SendEmail = function(req, res) {
 	var send_at = new Date();
 	mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
 		console.log(result);
+		res.send(req.body);
 		/*
 		[{
 				"email": "recipient.email@example.com",
