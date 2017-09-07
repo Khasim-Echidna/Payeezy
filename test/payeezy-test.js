@@ -76,17 +76,17 @@ exports.performPurchaseTransaction = function(req, res) {
 		"cvv": req.body.cardDetails.cvv
 	  }
 	};
-	console.log("--->"+obj);
-	console.log("-==->"+JSON.stringify(obj));
+	//console.log("--->"+obj);
+	//console.log("-==->"+JSON.stringify(obj));
     payeezy.transaction.purchase(
 		obj,
         function(error, response) {
             if (error) {
-                console.log('Purchase Transaction Failed\n' + error);
+                //console.log('Purchase Transaction Failed\n' + error);
 				res.send(error);
             }
             if (response) {
-                console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
+                //console.log('Purchase Successful.\nTransaction Tag: ' + response.transaction_tag);
 				req.body.authorizationResponse = {
 					  "responseCode": "1000",
 					  "responseReason": response.bank_message,
@@ -100,6 +100,98 @@ exports.performPurchaseTransaction = function(req, res) {
                 //performSecondaryTransaction(secondaryTransactionType, response.transaction_id, response.transaction_tag, response.amount);
             }
         });
+}
+
+var mandrill = require('mandrill-api/mandrill');
+var mandrill_client = new mandrill.Mandrill('cGnjNZ82NL45TUV10VtsgQ');
+exports.SendEmail = function(req, res) {
+	console.log("-------========------>"+JSON.stringify(req.body));
+	var message = {
+		"html": "<p>Example HTML content</p>",
+		"text": "Example text content",
+		"subject": "example subject",
+		"from_email": "khasim.a@echidnainc.com",
+		"from_name": "Example Name",
+		"to": [{
+				"email": "khasim.a@echidnainc.com",
+				"name": "khasim ali",
+				"type": "to"
+			}],
+		"headers": {
+			"Reply-To": "khasim.a@echidnainc.com"
+		},
+		"important": false,
+		"track_opens": null,
+		"track_clicks": null,
+		"auto_text": null,
+		"auto_html": null,
+		"inline_css": null,
+		"url_strip_qs": null,
+		"preserve_recipients": null,
+		"view_content_link": null,
+		"bcc_address": "khasim.a@echidnainc.com",
+		"tracking_domain": null,
+		"signing_domain": null,
+		"return_path_domain": null,
+		"merge": true,
+		"merge_language": "mailchimp",
+		"global_merge_vars": [{
+				"name": "merge1",
+				"content": "merge1 content"
+			}],
+		"merge_vars": [{
+				"rcpt": "khasim.a@echidnainc.com",
+				"vars": [{
+						"name": "merge2",
+						"content": "merge2 content"
+					}]
+			}],
+		"tags": [
+			"password-resets"
+		],
+		"subaccount": "customer-123",
+		"google_analytics_domains": [
+			"echidnainc.com"
+		],
+		"google_analytics_campaign": "khasim.a@echidnainc.com",
+		"metadata": {
+			"website": "www.echidnainc.com"
+		},
+		"recipient_metadata": [{
+				"rcpt": "khasim.a@echidnainc.com",
+				"values": {
+					"user_id": 123456
+				}
+			}],
+		"attachments": [{
+				"type": "text/plain",
+				"name": "myfile.txt",
+				"content": "ZXhhbXBsZSBmaWxl"
+			}],
+		"images": [{
+				"type": "image/png",
+				"name": "IMAGECID",
+				"content": "ZXhhbXBsZSBmaWxl"
+			}]
+	};
+	var async = false;
+	var ip_pool = "Main Pool";
+	var send_at = new Date();
+	mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+		console.log(result);
+		/*
+		[{
+				"email": "recipient.email@example.com",
+				"status": "sent",
+				"reject_reason": "hard-bounce",
+				"_id": "abc123abc123abc123abc123abc123"
+			}]
+		*/
+	}, function(e) {
+		// Mandrill returns the error as an object with name and message keys
+		console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+		// A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+	});
 }
 
 function performSecondaryTransaction(secondaryTransactionType, id, tag, amount) {
